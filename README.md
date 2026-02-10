@@ -22,29 +22,21 @@ The solution is built incrementally across **three phases**, reflecting real-wor
 
 ### Final Execution Flow
 
-User
-↓
-.NET 9 Web App
-↓
-SQL Database
-↓
-Azure Function (Python – Data Generation)
-↓
-Azure Blob Storage (Raw)
-↓
-Azure Function (Event Trigger)
-↓
-Microsoft Fabric Master Pipeline
-↓
-Fabric Pipelines / Dataflows
-↓
-Fabric Lakehouse (Raw → Silver → Gold)
-↓
-Spark Notebooks
-↓
-Direct Lake Semantic Model
-↓
-Power BI Dashboards
+
+| Step | Component | Purpose |
+|------|-----------|---------|
+| 1 | User | Submits emotion via web app |
+| 2 | .NET Web App | Captures emotion, intensity, reason, user, timestamp |
+| 3 | SQL Database | Stores structured emotional events |
+| 4 | Azure Function (Python – Data Generation) | Dumps data to Blob Storage (Raw) |
+| 5 | Azure Blob Storage (Raw) | Stores raw CSV files |
+| 6 | Azure Function (Event Trigger) | Triggers Fabric master pipeline on blob arrival |
+| 7 | Microsoft Fabric Master Pipeline | Orchestrates ingestion and transformations |
+| 8 | Fabric Pipelines / Dataflows | Handles data ingestion, transformations, and storage |
+| 9 | Fabric Lakehouse | Raw → Silver → Gold layers |
+| 10 | Spark Notebooks | Transformations: Raw→Silver, Silver→Gold |
+| 11 | Direct Lake Semantic Model | Analytics-ready layer |
+| 12 | Power BI Dashboards | Visualizes emotional trends and insights |
 
 
 ---
