@@ -46,12 +46,20 @@ This pipeline handles:
    - Standardizes data values (e.g., Emotion types, intensity scores)  
    - Writes normalized dataset to **Silver Blob folder**  
 
+### Bronze Topic Event Grid Trigger
+
+- The first pipeline `pl_EmotionDataValidation` is **event-driven**.  
+- Triggered by **Event Grid events** when new blobs arrive in the **Bronze/Raw storage layer**.  
+- Automatically starts the pipeline whenever the Azure Function or other ingestion process uploads a new CSV.  
+- Captures the blob path and file name to feed into **pipeline parameters** for validation and normalization.
+
 > **Screenshot Placeholder:**  
 <img width="1865" height="818" alt="image" src="https://github.com/user-attachments/assets/b4a9261e-43b8-44f5-af79-3efc8a87b492" />
 <img width="1498" height="435" alt="image" src="https://github.com/user-attachments/assets/4cac768a-a6bb-479e-8bc5-e2da1a9ac8a8" />
 <img width="1413" height="516" alt="image" src="https://github.com/user-attachments/assets/3eafbeee-850b-4e25-b6d0-847d3e5a0a6b" />
 <img width="1232" height="545" alt="image" src="https://github.com/user-attachments/assets/9cd870ae-8648-4db0-962f-52a1ce37a11e" />
 <img width="1918" height="846" alt="image" src="https://github.com/user-attachments/assets/b74d1344-3bd8-4bcd-882a-6f478536419f" />
+<img width="758" height="777" alt="image" src="https://github.com/user-attachments/assets/7bbe2732-f9cb-4905-9711-34a6a5347e58" />
 
 
 
@@ -77,12 +85,15 @@ This pipeline handles:
 
 These pipelines leverage multiple linked services:
 
+<img width="1542" height="530" alt="image" src="https://github.com/user-attachments/assets/cec8aa55-3714-49c1-b6b4-4c5fb57282f6" />
+
+
 | Service Type       | Name / Purpose                                      |
 |------------------|---------------------------------------------------|
-| Azure Blob Storage | Raw/Bronze, Silver, Quarantine layers            |
-| Azure SQL Database | `[dbo].[SpInsertLineage]` for lineage tracking   |
-| Azure Function     | Phase 1 data generator                            |
-| Key Vault          | Secrets for storage, SQL connections, and function credentials |
+| Azure Blob Storage | LS_DATALAKE/ Raw/Bronze, Silver, Quarantine layers            |
+| Azure SQL Database | LS_SQLDatabase/ `[dbo].[SpInsertLineage]` for lineage tracking   |
+| Azure Function     | GenerateEmotionData/Phase 1 data generator                            |
+| Key Vault          | LS_KeyVault /Secrets for storage, SQL connections, and function credentials |
 
 ---
 
