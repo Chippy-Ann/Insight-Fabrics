@@ -1,0 +1,39 @@
+@{
+    ViewData["Title"] = "Choose Your Emotion";
+}
+
+<style>
+body {
+    background-color: yellowgreen; 
+    background-size: cover;
+    background-position: center;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    color: white;
+}
+
+.emotion-container {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 50px;
+}
+
+.emotion-button img {
+    width: 100px;
+    height: 100px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.emotion-button img:hover {
+    transform: scale(1.1);
+}
+
+input[name="userName"] {
+    padding: 10px;
+    font-size: 16px;
+    margin-top: 20px;
+}
+</style>
+<h2>Thank you! Your emotion has been recorded 😄</h2>

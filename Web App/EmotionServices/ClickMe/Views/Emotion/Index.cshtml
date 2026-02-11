@@ -1,0 +1,121 @@
+@{
+    ViewData["Title"] = "Choose Your Emotion";
+}
+
+<style>
+    body {
+        background-color: yellowgreen;
+        text-align: center;
+        font-family: Arial, sans-serif;
+        color: white;
+    }
+
+    .emotion-container {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 30px;
+        flex-wrap: wrap;
+    }
+
+    .emotion-tile {
+        width: 120px;
+        height: 120px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        border: 3px solid transparent;
+        transition: transform 0.2s, border 0.2s;
+    }
+
+    .emotion-tile:hover {
+        transform: scale(1.05);
+    }
+
+    .emotion-tile.selected {
+        border: 3px solid white;
+        box-shadow: 0 0 10px rgba(255,255,255,0.8);
+    }
+
+    /* Emotion colors */
+    .anger { background-color: #e74c3c; }
+    .joy { background-color: #f1c40f; color: black; }
+    .sadness { background-color: #3498db; }
+    .disgust { background-color: #2ecc71; }
+    .fear { background-color: #9b59b6; }
+
+    input, select {
+        padding: 10px;
+        font-size: 16px;
+        margin-top: 10px;
+    }
+
+    .submit-btn {
+        margin-top: 30px;
+        padding: 12px 30px;
+        font-size: 18px;
+        border-radius: 8px;
+        border: none;
+        background-color: black;
+        color: white;
+        cursor: pointer;
+    }
+
+    .submit-btn:hover {
+        background-color: #333;
+    }
+</style>
+
+<h1>Which emotion is running your mood now?</h1>
+
+<form method="post" asp-action="Submit">
+    
+    <label>Tell me your Name</label><br />
+    <input type="text" name="userName" placeholder="Enter your name" required /><br />
+
+    <label>Choose how you feel now</label>
+
+    <!-- Hidden field to store selected emotion -->
+    <input type="hidden" name="emotion" id="emotion" required />
+
+    <div class="emotion-container">
+        <div class="emotion-tile anger" onclick="selectEmotion('Anger', this)">Anger</div>
+        <div class="emotion-tile joy" onclick="selectEmotion('Joy', this)">Joy</div>
+        <div class="emotion-tile sadness" onclick="selectEmotion('Sadness', this)">Sadness</div>
+        <div class="emotion-tile disgust" onclick="selectEmotion('Disgust', this)">Disgust</div>
+        <div class="emotion-tile fear" onclick="selectEmotion('Fear', this)">Fear</div>
+    </div>
+
+    <br />
+
+    <label>What triggered it?</label><br />
+    <input type="text" name="triggerfactor" placeholder="What triggered it?" required /><br />
+
+    <label>How much you score your emotion?</label><br />
+    <select name="intensity" required>
+        <option value="" disabled selected>Select intensity</option>
+        @for (int i = 1; i <= 10; i++)
+        {
+            <option value="@i">@i</option>
+        }
+    </select>
+
+    <br />
+
+    <button type="submit" class="submit-btn">Submit</button>
+</form>
+
+<script>
+    function selectEmotion(emotion, element) {
+        document.getElementById("emotion").value = emotion;
+
+        document.querySelectorAll(".emotion-tile")
+            .forEach(tile => tile.classList.remove("selected"));
+
+        element.classList.add("selected");
+    }
+</script>
