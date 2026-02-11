@@ -1,0 +1,8 @@
+CREATE TABLE EmotionChoices (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    UserName NVARCHAR(100) NOT NULL,
+    Emotion NVARCHAR(50) NOT NULL,
+    Intensity INT NOT NULL,
+    TriggerFactor NVARCHAR(1000) NOT NULL,
+    CreatedAt DATETIME2 NOT NULL DEFAULT GETUTCDATE()
+);
