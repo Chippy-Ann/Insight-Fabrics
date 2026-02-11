@@ -1,0 +1,82 @@
+{
+	"name": "Normalisation",
+	"properties": {
+		"folder": {
+			"name": "InsightFabric_Emotions"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "silverValidated",
+						"type": "DatasetReference"
+					},
+					"name": "ValidatedData"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "silverNormalised",
+						"type": "DatasetReference"
+					},
+					"name": "NomalisedData"
+				}
+			],
+			"transformations": [
+				{
+					"name": "NormaliseText"
+				}
+			],
+			"scriptLines": [
+				"parameters{",
+				"     pSourceFileName as string",
+				"}",
+				"source(output(",
+				"          sEmotion as string,",
+				"          iintensity as integer,",
+				"          sReason as string,",
+				"          dtCreatedDate as timestamp,",
+				"          iEmployeeId as integer,",
+				"          sEmployeeName as string,",
+				"          sDepartment as string,",
+				"          iSelectedRowid as integer",
+				"     ),",
+				"     allowSchemaDrift: false,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> ValidatedData",
+				"ValidatedData derive(clean_Department = lower(trim(sDepartment)),",
+				"          Day_key = dayOfMonth(dtCreatedDate),",
+				"          Month_Key = month(dtCreatedDate),",
+				"          Year_Key = year(dtCreatedDate),",
+				"          AMorPM = iif(toInteger(toString(dtCreatedDate, 'HH'))>12 , 'PM' ,'AM'),",
+				"          intensity_Category = iif(iintensity <= 3, 'Weak',\r",
+				"    iif(iintensity <= 7, 'Moderate', 'Dominant')),",
+				"          Date_Key = toInteger(toString(toDate(dtCreatedDate), 'yyyyMMdd')),",
+				"          Week_Key = toInteger(toString(dtCreatedDate, 'yyyy') + toString(dtCreatedDate, 'ww')),",
+				"          clean_reason = lower(trim(sReason))) ~> NormaliseText",
+				"NormaliseText sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          sEmotion as string,",
+				"          iintensity as integer,",
+				"          sReason as string,",
+				"          dtCreatedDate as timestamp,",
+				"          iEmployeeId as integer,",
+				"          sEmployeeName as string,",
+				"          sDepartment as string,",
+				"          iSelectedRowid as integer",
+				"     ),",
+				"     format: 'parquet',",
+				"     partitionFileNames:[('Silver_Normalised_' + toString(currentUTC(), 'yyyyMMdd_HHmmss') + '.parquet')],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> NomalisedData"
+			]
+		}
+	}
+}

@@ -1,0 +1,174 @@
+{
+	"name": "pl_Emotiondatavalidation",
+	"properties": {
+		"activities": [
+			{
+				"name": "Schema Validation",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "Set Normalised file name",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "schemavalidation",
+						"type": "DataFlowReference",
+						"parameters": {
+							"pSinkfilename": {
+								"value": "'@{variables('DestinationFileName')}'",
+								"type": "Expression"
+							}
+						},
+						"datasetParameters": {
+							"rowdatainput": {
+								"FolderName": {
+									"value": "@pipeline().parameters.pFolderName",
+									"type": "Expression"
+								},
+								"FileName": {
+									"value": "@pipeline().parameters.pFileName",
+									"type": "Expression"
+								}
+							},
+							"Silver": {
+								"dsValidatedFileName": {
+									"value": "@variables('DestinationFileName')",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			},
+			{
+				"name": "Set Validated File Name",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "DestinationFileName",
+					"value": {
+						"value": "@concat('silver_Validated_',formatDateTime(pipeline().TriggerTime,'yyyyMMdd_HHmmss'),'.parquet')",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Normalisation",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "Schema Validation",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "Normalisation",
+						"type": "DataFlowReference",
+						"parameters": {
+							"pSourceFileName": {
+								"value": "'@{variables('DestinationFileName')}'",
+								"type": "Expression"
+							}
+						},
+						"datasetParameters": {
+							"ValidatedData": {
+								"dsValidatedFileName": {
+									"value": "@variables('DestinationFileName')",
+									"type": "Expression"
+								}
+							},
+							"NomalisedData": {
+								"dsNormalisedFileName": {
+									"value": "@variables('NormalisedFileName')",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			},
+			{
+				"name": "Set Normalised file name",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Set Validated File Name",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "NormalisedFileName",
+					"value": {
+						"value": "@concat('silver_Normalised_',formatDateTime(pipeline().TriggerTime,'yyyyMMdd_HHmmss'),'.parquet')",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"pFolderName": {
+				"type": "string"
+			},
+			"pFileName": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"DestinationFileName": {
+				"type": "String"
+			},
+			"NormalisedFileName": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "InsightFabric_Emotions"
+		},
+		"annotations": []
+	}
+}

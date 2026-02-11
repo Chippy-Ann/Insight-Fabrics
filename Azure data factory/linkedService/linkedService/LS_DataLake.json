@@ -1,0 +1,11 @@
+{
+	"name": "LS_DataLake",
+	"properties": {
+		"annotations": [],
+		"type": "AzureBlobFS",
+		"typeProperties": {
+			"url": "https://stginsightfabricdatalake.dfs.core.windows.net/"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/linkedservices"
+}

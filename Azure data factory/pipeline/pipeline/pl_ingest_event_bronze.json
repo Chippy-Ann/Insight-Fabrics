@@ -1,0 +1,190 @@
+{
+	"name": "pl_ingest_event_bronze",
+	"properties": {
+		"activities": [
+			{
+				"name": "Get Metadata of File created",
+				"type": "GetMetadata",
+				"dependsOn": [
+					{
+						"activity": "Invoke Function",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "bronzeemotions",
+						"type": "DatasetReference",
+						"parameters": {
+							"FolderName": {
+								"value": "@activity('Invoke Function').output.FolderName",
+								"type": "Expression"
+							},
+							"FileName": {
+								"value": "@activity('Invoke Function').output.FileName",
+								"type": "Expression"
+							}
+						}
+					},
+					"fieldList": [
+						"lastModified",
+						"size"
+					],
+					"storeSettings": {
+						"type": "AzureBlobStorageReadSettings",
+						"enablePartitionDiscovery": false
+					},
+					"formatSettings": {
+						"type": "DelimitedTextReadSettings"
+					}
+				}
+			},
+			{
+				"name": "TrackLineageinSQL",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "Get Metadata of File created",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[SpInsertLineage]",
+					"storedProcedureParameters": {
+						"BlobName": {
+							"value": {
+								"value": "@activity('Invoke Function').output.FileName",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"BlobUri": {
+							"value": {
+								"value": "@activity('Invoke Function').output.blobUri",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"CreatedOn": {
+							"value": {
+								"value": "@activity('Get Metadata of File created').output.lastModified",
+								"type": "Expression"
+							},
+							"type": "DateTime"
+						},
+						"CurrentStage": {
+							"value": "Bronze",
+							"type": "String"
+						},
+						"ErrorMessage": {
+							"value": null,
+							"type": "String"
+						},
+						"PipeLineName": {
+							"value": {
+								"value": "@pipeline().Pipeline",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"RowCountQuarrentine": {
+							"value": null,
+							"type": "Int32"
+						},
+						"RowCountRaw": {
+							"value": {
+								"value": "@activity('Invoke Function').output.recordsUploaded",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"RowCountSilver": {
+							"value": null,
+							"type": "Int32"
+						},
+						"RunId": {
+							"value": {
+								"value": "@pipeline().RunId",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"SilverModifiedOn": {
+							"value": null,
+							"type": "DateTime"
+						},
+						"SizeBytes": {
+							"value": {
+								"value": "@activity('Get Metadata of File created').output.size",
+								"type": "Expression"
+							},
+							"type": "Int64"
+						},
+						"Status": {
+							"value": "BronzeUploaded",
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LS_SQLDatabase",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Invoke Function",
+				"type": "AzureFunctionActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"functionName": {
+						"value": "@pipeline().parameters.pfnName",
+						"type": "Expression"
+					},
+					"method": "POST"
+				},
+				"linkedServiceName": {
+					"referenceName": "GenerateEmotionData",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"pfnName": {
+				"type": "string",
+				"defaultValue": "GenerateEmotionData"
+			}
+		},
+		"folder": {
+			"name": "InsightFabric_Emotions"
+		},
+		"annotations": []
+	}
+}

@@ -1,0 +1,139 @@
+{
+	"name": "schemavalidation",
+	"properties": {
+		"folder": {
+			"name": "InsightFabric_Emotions"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "bronzeemotions",
+						"type": "DatasetReference"
+					},
+					"name": "rowdatainput"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "silverValidated",
+						"type": "DatasetReference"
+					},
+					"name": "Silver"
+				},
+				{
+					"dataset": {
+						"referenceName": "quarrentine",
+						"type": "DatasetReference"
+					},
+					"name": "Quarrntine"
+				}
+			],
+			"transformations": [
+				{
+					"name": "Schemavalidation"
+				},
+				{
+					"name": "RemovingDuplicate"
+				},
+				{
+					"name": "ErrorMessage"
+				},
+				{
+					"name": "RemovingInvalidRows"
+				}
+			],
+			"scriptLines": [
+				"parameters{",
+				"     pSinkfilename as string",
+				"}",
+				"source(output(",
+				"          id as string,",
+				"          index as string,",
+				"          emotion as string,",
+				"          score as string,",
+				"          text as string,",
+				"          employee_name as string,",
+				"          employee_id as string,",
+				"          department as string,",
+				"          created_at as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> rowdatainput",
+				"rowdatainput derive(irowid = iif((!isInteger(index) || isNull(index) || index == ''),0 ,  toInteger(index) ),",
+				"          sEmotion = iif(isNull(emotion),'',toString(emotion)),",
+				"          iintensity = iif((!isInteger(score) || isNull(score) || score == ''),0 ,  \r",
+				"    iif(toInteger(score) <1 ,0,\r",
+				"       iif(toInteger(score) >10 ,10 ,toInteger(score)) \r",
+				"    )\r",
+				"),",
+				"          sReason = iif(isNull(text),'Not Sure Why',toString(text)),",
+				"          iEmployeeId = iif((!isInteger(employee_id) || isNull(employee_id) || index == ''),0 ,  toInteger(employee_id) ),",
+				"          sDepartment = iif(isNull(department),'',toString(department)),",
+				"          dtCreatedDate = iif(isNull(created_at) || created_at == '', toTimestamp('2000-01-01','yyyy-MM-dd'),\r",
+				"    iif(toTimestamp(created_at, 'yyyy-MM-dd') < toTimestamp('2000-01-01','yyyy-MM-dd'), toTimestamp('2000-01-01','yyyy-MM-dd'),\r",
+				"        iif(toTimestamp(created_at, 'yyyy-MM-dd') > currentTimestamp(), toTimestamp('2000-01-01','yyyy-MM-dd'),\r",
+				"            toTimestamp(created_at, 'yyyy-MM-dd')\r",
+				"        )\r",
+				"    )\r",
+				"),",
+				"          sEmployeeName = iif(isNull(employee_name),'Anonymous',toString(employee_name))) ~> Schemavalidation",
+				"RemovingInvalidRows@ValidRows aggregate(groupBy(sEmotion,",
+				"          iintensity,",
+				"          sReason,",
+				"          dtCreatedDate,",
+				"          iEmployeeId,",
+				"          sEmployeeName,",
+				"          sDepartment),",
+				"     iSelectedRowid = min(irowid)) ~> RemovingDuplicate",
+				"Schemavalidation derive(sErrorMessage = iif(sEmotion=='','Invalid Emotion',\r",
+				"    iif(iintensity==0,'Negligible Emotion',\r",
+				"        iif(iEmployeeId==0,'UnknownUser',\r",
+				"            iif(sDepartment=='','No Department',\r",
+				"                iif(dtCreatedDate==toTimestamp('2000-01-01','yyyy-MM-dd'),'Date notas expected','')\r",
+				"            )\r",
+				"        )\r",
+				"    )\r",
+				"    \r",
+				")) ~> ErrorMessage",
+				"ErrorMessage split(sErrorMessage=='',",
+				"     disjoint: false) ~> RemovingInvalidRows@(ValidRows, InValidRows)",
+				"RemovingDuplicate sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          sEmotion as string,",
+				"          iintensity as integer,",
+				"          sReason as string,",
+				"          dtCreatedDate as timestamp,",
+				"          iEmployeeId as integer,",
+				"          sEmployeeName as string,",
+				"          sDepartment as string,",
+				"          iSelectedRowid as integer",
+				"     ),",
+				"     format: 'parquet',",
+				"     partitionFileNames:[($pSinkfilename\r",
+				"\r",
+				")],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     saveOrder: 1) ~> Silver",
+				"RemovingInvalidRows@InValidRows sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:[('ErrorData_AfterSchemaValidation_' + toString(currentUTC(), 'yyyyMMdd_HHmmss') + '.csv'\r",
+				")],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     saveOrder: 2) ~> Quarrntine"
+			]
+		}
+	}
+}

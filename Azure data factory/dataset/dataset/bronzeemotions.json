@@ -1,0 +1,79 @@
+{
+	"name": "bronzeemotions",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_DataLake",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"FolderName": {
+				"type": "string"
+			},
+			"FileName": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "InsightFabric-Emotions"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@dataset().FileName",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@dataset().FolderName",
+					"type": "Expression"
+				},
+				"fileSystem": "bronze-emotion-data"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "id",
+				"type": "String"
+			},
+			{
+				"name": "index",
+				"type": "String"
+			},
+			{
+				"name": "emotion",
+				"type": "String"
+			},
+			{
+				"name": "score",
+				"type": "String"
+			},
+			{
+				"name": "text",
+				"type": "String"
+			},
+			{
+				"name": "employee_name",
+				"type": "String"
+			},
+			{
+				"name": "employee_id",
+				"type": "String"
+			},
+			{
+				"name": "department",
+				"type": "String"
+			},
+			{
+				"name": "created_at",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

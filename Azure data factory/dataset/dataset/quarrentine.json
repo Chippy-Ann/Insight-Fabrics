@@ -1,0 +1,26 @@
+{
+	"name": "quarrentine",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_DataLake",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "InsightFabric-Emotions"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "Quarrentine",
+				"fileSystem": "silver-emotion-data"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}

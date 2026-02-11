@@ -1,0 +1,65 @@
+{
+	"name": "silverValidated",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_DataLake",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"dsValidatedFileName": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "InsightFabric-Emotions"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@dataset().dsValidatedFileName",
+					"type": "Expression"
+				},
+				"folderPath": "Emotion-data",
+				"fileSystem": "silver-emotion-data"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": [
+			{
+				"name": "sEmotion",
+				"type": "UTF8"
+			},
+			{
+				"name": "iintensity",
+				"type": "INT32"
+			},
+			{
+				"name": "sReason",
+				"type": "UTF8"
+			},
+			{
+				"name": "dtCreatedDate",
+				"type": "INT96"
+			},
+			{
+				"name": "iEmployeeId",
+				"type": "INT32"
+			},
+			{
+				"name": "sEmployeeName",
+				"type": "UTF8"
+			},
+			{
+				"name": "sDepartment",
+				"type": "UTF8"
+			},
+			{
+				"name": "iSelectedRowid",
+				"type": "INT32"
+			}
+		]
+	}
+}
