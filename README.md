@@ -1,4 +1,4 @@
-# Insight Fabrics – End-to-End Data Engineering with Microsoft Fabric
+# Insight Fabrics – Architecture-Driven Data Platform Design using Microsoft Fabric
 
 **Insight-Fabrics** is a hands-on data engineering repository demonstrating **end-to-end analytics solutions built using Microsoft Fabric**.
 The project showcases how raw data is ingested, transformed, and modeled into **analytics-ready datasets** using Fabric Lakehouse, Pipelines, and Spark notebooks.
