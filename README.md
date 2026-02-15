@@ -1,6 +1,9 @@
-# Insight Fabrics – Event-Driven Emotional Insights Platform
+# Insight Fabrics – End-to-End Data Engineering with Microsoft Fabric
 
-An end-to-end **Azure + Microsoft Fabric data platform** that captures emotional events, processes them through layered pipelines, and delivers analytics-ready insights using **Direct Lake semantic models and Power BI dashboards**.
+**Insight-Fabrics** is a hands-on data engineering repository demonstrating **end-to-end analytics solutions built using Microsoft Fabric**.
+The project showcases how raw data is ingested, transformed, and modeled into **analytics-ready datasets** using Fabric Lakehouse, Pipelines, and Spark notebooks.
+
+This repository is designed to reflect **real-world data engineering patterns**, not just isolated experiments, and aligns closely with **enterprise Fabric workloads and DP-600 concepts.**
 
 ---
 
@@ -15,12 +18,6 @@ The solution is built incrementally across **three phases**, reflecting real-wor
 ---
 
 ## High-Level Architecture
-
-> ⚠️ **Note**  
-> Azure Data Factory pipelines were implemented in **Phase 2 strictly for learning purposes**.  
-> The **final project flow is fully implemented using Microsoft Fabric pipelines** in Phase 3.
-
-### Final Execution Flow
 
 
 | Step | Component | Purpose |
