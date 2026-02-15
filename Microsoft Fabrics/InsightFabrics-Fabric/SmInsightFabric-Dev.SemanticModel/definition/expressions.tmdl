@@ -1,0 +1,11 @@
+expression 'DirectLake - LhInsightFabric' =
+		let
+		    Source = AzureStorage.DataLake("https://onelake.dfs.fabric.microsoft.com/bc7938fc-605d-41ac-ac76-fb76a0c0cac4/baf1fc42-d907-4f03-a097-08b602d8a0c8", [HierarchicalNavigation=true])
+		in
+		    Source
+	lineageTag: 2825c790-f11c-415b-b259-ad2e6577a9d0
+
+	annotation PBI_IncludeFutureArtifacts = False
+
+	annotation PBI_RemovedChildren = [{"remoteItemId":{"analysisServicesObject":{"sourceName":null,"sourceLineageTag":"[dbo].[gold_burnout_daily_metrics]"}},"objectType":"Table"},{"remoteItemId":{"analysisServicesObject":{"sourceName":null,"sourceLineageTag":"[bronze].[tbl_rawEmotiondata]"}},"objectType":"Table"},{"remoteItemId":{"analysisServicesObject":{"sourceName":null,"sourceLineageTag":"[quarrentine].[invalid_emotion_events]"}},"objectType":"Table"},{"remoteItemId":{"analysisServicesObject":{"sourceName":null,"sourceLineageTag":"[silver].[silver_emotion_events]"}},"objectType":"Table"},{"remoteItemId":{"analysisServicesObject":{"sourceName":null,"sourceLineageTag":"[bronze].[tbl_emotiondata]"}},"objectType":"Table"}]
+

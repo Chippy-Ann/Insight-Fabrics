@@ -1,0 +1,105 @@
+{
+  "config": "{\"version\":\"5.69\",\"themeCollection\":{\"baseTheme\":{\"name\":\"CY25SU11\",\"type\":2,\"version\":{\"visual\":\"2.4.0\",\"report\":\"3.0.0\",\"page\":\"2.3.0\"}}},\"activeSectionIndex\":0,\"defaultDrillFilterOtherVisuals\":true,\"linguisticSchemaSyncVersion\":2,\"settings\":{\"useNewFilterPaneExperience\":true,\"allowChangeFilterTypes\":true,\"useStylableVisualContainerHeader\":true,\"queryLimitOption\":6,\"exportDataMode\":1,\"useDefaultAggregateDisplayName\":true,\"useEnhancedTooltips\":true},\"objects\":{\"section\":[{\"properties\":{\"verticalAlignment\":{\"expr\":{\"Literal\":{\"Value\":\"'Top'\"}}}}}]}}",
+  "layoutOptimization": 0,
+  "resourcePackages": [
+    {
+      "resourcePackage": {
+        "disabled": false,
+        "items": [
+          {
+            "name": "CY25SU11",
+            "path": "BaseThemes/CY25SU11.json",
+            "type": 202
+          }
+        ],
+        "name": "SharedResources",
+        "type": 2
+      }
+    }
+  ],
+  "sections": [
+    {
+      "config": "{}",
+      "displayName": "Page 1",
+      "displayOption": 1,
+      "filters": "[]",
+      "height": 720.00,
+      "name": "5dfb197725cb1d00c14d",
+      "visualContainers": [
+        {
+          "config": "{\"name\":\"19f1bd6101cb6c5608d1\",\"layouts\":[{\"id\":0,\"position\":{\"x\":143.47968136883412,\"y\":445.61477963589823,\"z\":5000,\"width\":335.24579396756434,\"height\":220.73797133666787,\"tabOrder\":5000}}],\"singleVisual\":{\"visualType\":\"lineChart\",\"projections\":{\"Category\":[{\"queryRef\":\"gold_burnout_daily_metrics.event_date\",\"active\":true}],\"Y\":[{\"queryRef\":\"gold_burnout_daily_metrics.Avg Burnout Score\"}],\"Y2\":[{\"queryRef\":\"CountNonNull(gold_burnout_daily_metrics.rolling_7d_negative_avg)\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"g\",\"Entity\":\"gold_burnout_daily_metrics\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"event_date\"},\"Name\":\"gold_burnout_daily_metrics.event_date\",\"NativeReferenceName\":\"event_date\"},{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"Avg Burnout Score\"},\"Name\":\"gold_burnout_daily_metrics.Avg Burnout Score\",\"NativeReferenceName\":\"Avg Burnout Score\"},{\"Aggregation\":{\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"rolling_7d_negative_avg\"}},\"Function\":5},\"Name\":\"CountNonNull(gold_burnout_daily_metrics.rolling_7d_negative_avg)\",\"NativeReferenceName\":\"Count of rolling_7d_negative_avg\"}],\"OrderBy\":[{\"Direction\":1,\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"event_date\"}}}]},\"drillFilterOtherVisuals\":true,\"hasDefaultSort\":true,\"objects\":{\"lineStyles\":[{\"properties\":{\"lineChartType\":{\"expr\":{\"Literal\":{\"Value\":\"'smooth'\"}}}}}]},\"vcObjects\":{\"title\":[{\"properties\":{\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Burnout Trend Over Time'\"}}}}}]}}}",
+          "filters": "[]",
+          "height": 220.74,
+          "width": 335.25,
+          "x": 143.48,
+          "y": 445.61,
+          "z": 5000.00
+        },
+        {
+          "config": "{\"name\":\"5c1d325820cd346bdd15\",\"layouts\":[{\"id\":0,\"position\":{\"x\":1106.3989898065627,\"y\":44.97556869132368,\"z\":7000,\"width\":148.41937668136813,\"height\":221.87947221053017,\"tabOrder\":7000}}],\"singleVisual\":{\"visualType\":\"textSlicer\",\"drillFilterOtherVisuals\":true,\"objects\":{\"general\":[{\"properties\":{}}]}}}",
+          "filters": "[{\"name\":\"a16d45600020154e698a\",\"expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Entity\":\"dimdepartment\"}},\"Property\":\"department\"}},\"type\":\"Categorical\",\"howCreated\":1,\"objects\":{\"general\":[{\"properties\":{\"isInvertedSelectionMode\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}]",
+          "height": 221.88,
+          "width": 148.42,
+          "x": 1106.40,
+          "y": 44.98,
+          "z": 7000.00
+        },
+        {
+          "config": "{\"name\":\"6432b8744b0b00767cac\",\"layouts\":[{\"id\":0,\"position\":{\"x\":67.60100372185452,\"y\":133.82239512285489,\"z\":4000,\"width\":986.4228094107345,\"height\":300.75548594620994,\"tabOrder\":4000}}],\"singleVisual\":{\"visualType\":\"lineChart\",\"projections\":{\"Category\":[{\"queryRef\":\"emotion_trend_daily.event_date\",\"active\":true}],\"Y\":[{\"queryRef\":\"emotion_trend_daily.Avg Emotion Intensity\"}],\"Series\":[{\"queryRef\":\"emotion_trend_daily.emotion_type\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"e\",\"Entity\":\"emotion_trend_daily\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"e\"}},\"Property\":\"event_date\"},\"Name\":\"emotion_trend_daily.event_date\",\"NativeReferenceName\":\"event_date\"},{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"e\"}},\"Property\":\"Avg Emotion Intensity\"},\"Name\":\"emotion_trend_daily.Avg Emotion Intensity\",\"NativeReferenceName\":\"Avg Emotion Intensity1\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"e\"}},\"Property\":\"emotion_type\"},\"Name\":\"emotion_trend_daily.emotion_type\",\"NativeReferenceName\":\"emotion_type\"}],\"OrderBy\":[{\"Direction\":1,\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"e\"}},\"Property\":\"event_date\"}}}]},\"drillFilterOtherVisuals\":true,\"hasDefaultSort\":true,\"objects\":{\"valueAxis\":[{\"properties\":{\"gridlineShow\":{\"expr\":{\"Literal\":{\"Value\":\"false\"}}}}}]},\"vcObjects\":{\"title\":[{\"properties\":{\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Emotion Trend Over Time'\"}}}}}]}}}",
+          "filters": "[]",
+          "height": 300.76,
+          "width": 986.42,
+          "x": 67.60,
+          "y": 133.82,
+          "z": 4000.00
+        },
+        {
+          "config": "{\"name\":\"8076f6d86ca9d4263bcc\",\"layouts\":[{\"id\":0,\"position\":{\"x\":415.274417583222,\"y\":58.46823929872079,\"z\":1000,\"width\":157.4144904196329,\"height\":83.95439489047087,\"tabOrder\":1000}}],\"singleVisual\":{\"visualType\":\"kpi\",\"projections\":{\"Indicator\":[{\"queryRef\":\"gold_burnout_daily_metrics.High Burnout %\"}],\"TrendLine\":[{\"queryRef\":\"dimdate.Date\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"g\",\"Entity\":\"gold_burnout_daily_metrics\",\"Type\":0},{\"Name\":\"d\",\"Entity\":\"dimdate\",\"Type\":0}],\"Select\":[{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"High Burnout %\"},\"Name\":\"gold_burnout_daily_metrics.High Burnout %\",\"NativeReferenceName\":\"High Burnout %\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"d\"}},\"Property\":\"Date\"},\"Name\":\"dimdate.Date\",\"NativeReferenceName\":\"Date\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'High Burnout %'\"}}}}}]}}}",
+          "filters": "[]",
+          "height": 83.95,
+          "width": 157.41,
+          "x": 415.27,
+          "y": 58.47,
+          "z": 1000.00
+        },
+        {
+          "config": "{\"name\":\"8b1feef01601d26948a6\",\"layouts\":[{\"id\":0,\"position\":{\"x\":560.6954230185019,\"y\":58.46823929872079,\"z\":2000,\"width\":230.8745859487949,\"height\":83.95439489047087,\"tabOrder\":2000}}],\"singleVisual\":{\"visualType\":\"kpi\",\"projections\":{\"Indicator\":[{\"queryRef\":\"emotion_trend_daily.Avg Emotion Intensity\"}],\"TrendLine\":[{\"queryRef\":\"dimdate.Date\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"e\",\"Entity\":\"emotion_trend_daily\",\"Type\":0},{\"Name\":\"d\",\"Entity\":\"dimdate\",\"Type\":0}],\"Select\":[{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"e\"}},\"Property\":\"Avg Emotion Intensity\"},\"Name\":\"emotion_trend_daily.Avg Emotion Intensity\",\"NativeReferenceName\":\"Avg Emotion Intensity\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"d\"}},\"Property\":\"Date\"},\"Name\":\"dimdate.Date\",\"NativeReferenceName\":\"Date\"}]},\"drillFilterOtherVisuals\":true}}",
+          "filters": "[]",
+          "height": 83.95,
+          "width": 230.87,
+          "x": 560.70,
+          "y": 58.47,
+          "z": 2000.00
+        },
+        {
+          "config": "{\"name\":\"bc7e92e6839764a7b143\",\"layouts\":[{\"id\":0,\"position\":{\"x\":827.5504639203557,\"y\":58.46823929872079,\"z\":3000,\"width\":226.37702907966252,\"height\":83.95439489047087,\"tabOrder\":3000}}],\"singleVisual\":{\"visualType\":\"kpi\",\"projections\":{\"TrendLine\":[{\"queryRef\":\"dimdate.Date\"}],\"Indicator\":[{\"queryRef\":\"gold_sentiment_daily.Positive_Sentiment_7d\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"d\",\"Entity\":\"dimdate\",\"Type\":0},{\"Name\":\"g\",\"Entity\":\"gold_sentiment_daily\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"d\"}},\"Property\":\"Date\"},\"Name\":\"dimdate.Date\",\"NativeReferenceName\":\"Date\"},{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"Positive_Sentiment_7d\"},\"Name\":\"gold_sentiment_daily.Positive_Sentiment_7d\",\"NativeReferenceName\":\"Positive_Sentiment_7d\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Positive Sentiment %'\"}}}}}]}}}",
+          "filters": "[]",
+          "height": 83.95,
+          "width": 226.38,
+          "x": 827.55,
+          "y": 58.47,
+          "z": 3000.00
+        },
+        {
+          "config": "{\"name\":\"e08ed870aac169db674b\",\"layouts\":[{\"id\":0,\"position\":{\"x\":623.5847690260867,\"y\":455.27206588187744,\"z\":6000,\"width\":335.24579396756434,\"height\":220.73797133666787,\"tabOrder\":6000}}],\"singleVisual\":{\"visualType\":\"donutChart\",\"projections\":{\"Category\":[{\"queryRef\":\"gold_burnout_daily_metrics.burnout_level\",\"active\":true}],\"Y\":[{\"queryRef\":\"gold_burnout_daily_metrics.Total Records\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"g\",\"Entity\":\"gold_burnout_daily_metrics\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"burnout_level\"},\"Name\":\"gold_burnout_daily_metrics.burnout_level\",\"NativeReferenceName\":\"burnout_level\"},{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"Total Records\"},\"Name\":\"gold_burnout_daily_metrics.Total Records\",\"NativeReferenceName\":\"Total Records\"}],\"OrderBy\":[{\"Direction\":2,\"Expression\":{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"Total Records\"}}}]},\"drillFilterOtherVisuals\":true,\"hasDefaultSort\":true}}",
+          "filters": "[]",
+          "height": 220.74,
+          "width": 335.25,
+          "x": 623.58,
+          "y": 455.27,
+          "z": 6000.00
+        },
+        {
+          "config": "{\"name\":\"e792f4d6156c496c17bc\",\"layouts\":[{\"id\":0,\"position\":{\"x\":169.40797540398586,\"y\":58.46823929872079,\"z\":0,\"width\":217.3819153413978,\"height\":74.95928115220613,\"tabOrder\":0}}],\"singleVisual\":{\"visualType\":\"kpi\",\"projections\":{\"Indicator\":[{\"queryRef\":\"gold_burnout_daily_metrics.Avg Burnout Score\"}],\"TrendLine\":[{\"queryRef\":\"dimdate.Date\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"g\",\"Entity\":\"gold_burnout_daily_metrics\",\"Type\":0},{\"Name\":\"d\",\"Entity\":\"dimdate\",\"Type\":0}],\"Select\":[{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"g\"}},\"Property\":\"Avg Burnout Score\"},\"Name\":\"gold_burnout_daily_metrics.Avg Burnout Score\",\"NativeReferenceName\":\"Avg Burnout Score\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"d\"}},\"Property\":\"Date\"},\"Name\":\"dimdate.Date\",\"NativeReferenceName\":\"Date\"}]},\"drillFilterOtherVisuals\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'Avg Burnout'\"}}}}}]}}}",
+          "filters": "[]",
+          "height": 74.96,
+          "width": 217.38,
+          "x": 169.41,
+          "y": 58.47,
+          "z": 0.00
+        }
+      ],
+      "width": 1280.00
+    }
+  ]
+}

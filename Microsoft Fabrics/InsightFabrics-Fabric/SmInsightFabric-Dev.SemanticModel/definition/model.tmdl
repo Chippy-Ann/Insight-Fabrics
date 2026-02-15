@@ -1,0 +1,20 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-AU
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_QueryOrder = ["DirectLake - LhInsightFabric"]
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_ProTooling = ["RemoteModeling","DirectLakeOnOneLakeCreatedInDesktop","DaxQueryView_Desktop","DirectLakeOnOneLakeInWeb","WebModelingEdit"]
+
+ref table emotion_trend_daily
+ref table gold_sentiment_daily
+ref table gold_burnout_daily_metrics
+ref table dimdepartment
+ref table dimdate
+
