@@ -1,0 +1,36 @@
+trigger: none  # Manual run only
+
+pool:
+  name: SelfHosted
+
+stages:
+  - stage: Bootstrap_Backend
+    displayName: 'Create Terraform Backend Infrastructure'
+    jobs:
+      - job: CreateBackendInfra
+        displayName: 'Provision Storage for Terraform State'
+        steps:
+          - task: AzureCLI@2
+            inputs:
+              azureSubscription: 'MyAzureServiceConnection'
+              scriptType: 'ps'
+              scriptLocation: 'inlineScript'
+              inlineScript: |
+                Write-Host "Creating resource group..."
+                az group create --name rg-backend-insightfabric --location australiaeast
+
+                Write-Host "Creating storage account..."
+                az storage account create `
+                  --name tfstateinsightfabric `
+                  --resource-group rg-backend-insightfabric `
+                  --location australiaeast `
+                  --sku Standard_LRS `
+                  --allow-blob-public-access false
+
+                Write-Host "Creating blob container..."
+                az storage container create `
+                  --name tfstate `
+                  --account-name tfstateinsightfabric `
+                  --auth-mode login `
+                  --public-access off
+            displayName: 'Run Azure CLI to Create Backend'

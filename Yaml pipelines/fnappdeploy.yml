@@ -1,0 +1,49 @@
+trigger:
+  branches:
+    include:
+      - main
+      - FabricsOrchestration
+
+parameters:
+  - name: environment
+    type: string
+    default: dev
+
+pool:
+  name: SelfHosted   # your self-hosted agent pool name
+
+variables:
+  env: ${{ parameters.environment }}
+  pythonVersion: '3.10'
+  function_app_name: fn-${{ parameters.environment }}-insightfabric
+  resource_group_name: rg-${{ parameters.environment }}-insightfabric
+  artifactName: functionapp_package.zip
+
+steps:
+# 1. Checkout code
+- checkout: self
+  displayName: 'Checkout source code'
+
+# 2. Use system Python (NO UsePythonVersion)  
+- script: |
+    python --version
+  displayName: "Verify system Python"
+
+# 3. Install dependencies
+- script: |
+    python -m pip install --upgrade pip
+    pip install -r requirements.txt
+  displayName: 'Install Python dependencies'
+
+# 4. deploying using core tools
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'MyAzureServiceConnection'
+    scriptType: 'ps'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      cd $(Build.SourcesDirectory)
+      func azure functionapp publish  $(function_app_name) --python
+  displayName: 'Publish Function App with Core Tools'
+
+

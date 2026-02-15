@@ -1,0 +1,94 @@
+trigger:
+  branches:
+    include:
+      - main
+      - Phase1-platformsdeployment
+      - Phase2-ADF
+
+parameters:
+  - name: environment
+    type: string
+    default: dev
+
+variables:
+  - group: InsightFabric-TerraformAuth  # Secure SP credentials
+  - name: env
+    value: ${{ parameters.environment }}
+  - name: workingDirectory
+    value: 'learn-terraform-azure'
+  - name: resource_group_name
+    value: rg-${{ parameters.environment }}-insightfabric
+  - name: keyvault_name
+    value: kv-${{ parameters.environment }}-insightfabric
+  - name: sqlserver_name
+    value: sql-${{ parameters.environment }}-insightfabric
+  - name: dotnetapp_name
+    value: dotnetapp-${{ parameters.environment }}-insightfabric
+  - name: azure-data-factory
+    value: adf-${{ parameters.environment }}-insightfabric
+  - name: function_app_name
+    value: fn-${{ parameters.environment }}-insightfabric
+  - name: log_analytics_workspace_name
+    value: law-${{ parameters.environment }}-insightfabric
+  - name: application_insights_name
+    value: appi-${{ parameters.environment }}-insightfabric
+
+
+pool:
+  name: SelfHosted
+
+stages:
+  - stage: Terraform_Deploy
+    jobs:
+      - job: DeployInfra
+        displayName: 'Terraform Init, Plan, Apply'
+        steps:
+
+          - powershell: |
+              Write-Host "Injecting Service Principal credentials for Terraform backend..."
+              Write-Host "ARM_CLIENT_ID: $env:ARM_CLIENT_ID"
+              Write-Host "ARM_TENANT_ID: $env:ARM_TENANT_ID"
+              Write-Host "ARM_SUBSCRIPTION_ID: $env:ARM_SUBSCRIPTION_ID"
+              Write-Host "ARM_CLIENT_SECRET: ********"
+              terraform init
+            displayName: 'Manual Terraform Init with SP Auth'
+            workingDirectory: '$(workingDirectory)'
+            env:
+              ARM_CLIENT_ID: $(servicePrincipalClientId)
+              ARM_CLIENT_SECRET: $(servicePrincipalClientSecret)
+              ARM_SUBSCRIPTION_ID: $(subscriptionId)
+              ARM_TENANT_ID: $(tenantId)
+
+          - powershell: |
+              Write-Host "Running terraform plan with SP credentials..."
+              $env:ARM_CLIENT_ID = "$(servicePrincipalClientId)"
+              $env:ARM_CLIENT_SECRET = "$(servicePrincipalClientSecret)"
+              $env:ARM_SUBSCRIPTION_ID = "$(subscriptionId)"
+              $env:ARM_TENANT_ID = "$(tenantId)"
+              terraform plan `
+                -var "environment=$(env)" `
+                -var "resource_group_name=$(resource_group_name)" `
+                -var "keyvault_name=$(keyvault_name)" `
+                -var "sqlserver-name=$(sqlserver_name)" `
+                -var "dotnetapp-name=$(dotnetapp_name)" `
+                -var "tenantid-devops=$(tenantId)" `
+                -var "principalid-devops=$(principalid)" `
+                -var "azure-data-factory=$(azure-data-factory)" `
+                -var "function_app_name=$(function_app_name)" `
+                -var "log_analytics_workspace_name=$(log_analytics_workspace_name)" `
+                -var "application_insights_name=$(application_insights_name)" `
+                -out=tfplan
+            displayName: 'Terraform Plan with SP Auth'
+            workingDirectory: '$(workingDirectory)'
+          
+          - powershell: |
+              Write-Host "Running terraform apply with SP credentials..."
+              $env:ARM_CLIENT_ID = "$(servicePrincipalClientId)"
+              $env:ARM_CLIENT_SECRET = "$(servicePrincipalClientSecret)"
+              $env:ARM_SUBSCRIPTION_ID = "$(subscriptionId)"
+              $env:ARM_TENANT_ID = "$(tenantId)"
+              terraform apply -auto-approve tfplan
+            displayName: 'Terraform Apply with SP Auth'
+            workingDirectory: '$(workingDirectory)'
+
+       

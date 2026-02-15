@@ -1,0 +1,72 @@
+trigger: none  # Triggered manually or from Terraform pipeline
+
+parameters:
+  - name: environment
+    type: string
+    default: dev
+
+variables:
+  env: ${{ parameters.environment }}
+  sql_project_name: InsightFabric-DatabaseProj
+  dacpac_name: InsightFabric-DatabaseProj.dacpac
+  resource_group: rg-${{ parameters.environment }}-insightfabric
+  sql_server_name: sql-${{ parameters.environment }}-insightfabric
+  sql_database_name: db-${{ parameters.environment }}-insightfabric
+  keyvault_name: kv-${{ parameters.environment }}-insightfabric
+
+pool:
+  name: SelfHosted
+
+stages:
+  - stage: BuildAndDeploy
+    jobs:
+      - job: DeploySQL
+        steps:
+          - task: NuGetToolInstaller@1
+
+          - task: VSBuild@1
+            displayName: 'Build SQL Project'
+            inputs:
+              solution: 'InsightFabric-DatabaseProj.sqlproj'
+              msbuildArgs: '/p:Configuration=Release'
+              platform: 'Any CPU'
+
+          - task: CopyFiles@2
+            displayName: 'Copy DACPAC to staging'
+            inputs:
+              SourceFolder: '$(Build.SourcesDirectory)/bin/Release'
+              Contents: '**/*.dacpac'
+              TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+          - task: AzureKeyVault@2
+            inputs:
+              azureSubscription: 'MyAzureServiceConnection'
+              KeyVaultName: $(keyvault_name)
+              SecretsFilter: 'EmotionDbConnectionString'
+              RunAsPreJob: true
+          - task: AzureCLI@2
+            displayName: Add pipeline agent IP to SQL firewall
+            inputs:
+              azureSubscription: 'MyAzureServiceConnection'
+              scriptType: ps
+              scriptLocation: inlineScript
+              inlineScript: |
+
+                az sql server firewall-rule create `
+                  --resource-group $(resource_group) `
+                  --server $(sql_server_name) `
+                  --name AllowAgentRange `
+                  --start-ip-address 122.150.0.0 `
+                  --end-ip-address 122.150.255.255
+
+
+
+          - task: SqlAzureDacpacDeployment@1
+            displayName: 'Deploy DACPAC using SqlAzureDacpacDeployment'
+            inputs:
+              azureSubscription: 'MyAzureServiceConnection'
+              AuthenticationType: 'connectionString'
+              ConnectionString: '$(EmotionDbConnectionString)'
+              DeployType: 'DacpacTask'
+              DeploymentAction: 'Publish'
+              DacpacFile: '$(Build.ArtifactStagingDirectory)/InsightFabric-DatabaseProj.dacpac'
