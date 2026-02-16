@@ -202,6 +202,17 @@ Highlights **burnout risk accumulation**.
 - Burnout calculated using **rolling windows**, not point-in-time spikes
 
 ---
+## 🛡️ Data Governance, Lineage & Audit
+
+This project implements enterprise-grade data management practices:
+
+- Incremental and CDC-based data ingestion
+- Batch-level audit logging (record counts, processing status)
+- Table-level metadata for governance and ownership
+- Quarantine handling for invalid data
+- End-to-end pipeline orchestration with lineage visibility
+
+---
 
 ## ⚠️ Known Limitations
 
