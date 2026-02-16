@@ -1,0 +1,220 @@
+table gold_burnout_daily_metrics
+	lineageTag: 315b7e75-efbe-49d1-8adc-a8217311b4ec
+	sourceLineageTag: [gold].[gold_burnout_daily_metrics]
+
+	measure 'Avg Burnout Score' = AVERAGE(gold_burnout_daily_metrics[rolling_7d_negative_avg])
+		lineageTag: ff1b83a0-e751-4b8a-9a65-3eb8922ed633
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'High Burnout Count' = ```
+			
+			CALCULATE(
+			    COUNTROWS(gold_burnout_daily_metrics),
+			    gold_burnout_daily_metrics[burnout_level] = "High"
+			)
+			
+			
+			
+			```
+		formatString: 0
+		lineageTag: ebdebf39-7a35-4a8a-b6a7-a383c75fca14
+
+		changedProperty = Name
+
+	measure 'High Burnout %' = DIVIDE([High Burnout Count], COUNTROWS(gold_burnout_daily_metrics), 0)
+		lineageTag: e19ef3b4-62aa-409b-8a25-0cb453f46257
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Records' = COUNTROWS(gold_burnout_daily_metrics)
+		formatString: 0
+		lineageTag: 262ddc44-d7d2-4567-b220-fb4f404a212d
+
+		changedProperty = Name
+
+	measure Avg_Burnout_14_30d = ```
+			
+			VAR LatestDate = MAX(gold_burnout_daily_metrics[event_date])
+			RETURN
+			
+			    CALCULATE(
+			        AVERAGE(gold_burnout_daily_metrics[rolling_7d_negative_avg]),
+			        DATESINPERIOD(
+			            dimdate[Date],
+			            LatestDate,   // start 14 days ago
+			            30,                // 14–30 days window = 16 days
+			            DAY
+			        )
+			
+			    )
+			
+			
+			```
+		lineageTag: b11bd423-604b-4c24-b5f9-6c473d63a3a0
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure High_Burnout_Count_30d = ```
+			
+			VAR LatestDate = MAX(gold_burnout_daily_metrics[event_date])
+			RETURN
+			    CALCULATE(
+			        COUNTROWS(gold_burnout_daily_metrics),
+			        gold_burnout_daily_metrics[burnout_level] = "High",
+			        DATESINPERIOD(
+			            gold_burnout_daily_metrics[event_date],
+			            LatestDate,
+			            -30,
+			            DAY
+			        )
+			
+			    )
+			
+			
+			```
+		formatString: 0
+		lineageTag: bf5b2bad-2fe2-45be-9133-40602d3ac4ae
+
+		changedProperty = Name
+
+	measure High_Burnout_Percent_30d = ```
+			
+			DIVIDE(
+			    [High_Burnout_Count_30d],
+			
+			        CALCULATE(
+			            COUNTROWS(gold_burnout_daily_metrics),
+			            DATESINPERIOD(
+			                gold_burnout_daily_metrics[event_date],
+			                MAX(gold_burnout_daily_metrics[event_date]),
+			                -30,
+			                DAY
+			            )
+			
+			        ),
+			    
+			    0
+			)*100
+			
+			```
+		lineageTag: 0e3c5b39-1d6a-4e89-8231-84b4aa81d179
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column event_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 5f117bfe-32e9-476b-8969-c90d2c11c5bf
+		sourceLineageTag: event_date
+		summarizeBy: none
+		sourceColumn: event_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column rolling_7d_negative_avg
+		dataType: double
+		lineageTag: eac91fa5-22ae-4ad0-8379-db01ba126a2f
+		sourceLineageTag: rolling_7d_negative_avg
+		summarizeBy: sum
+		sourceColumn: rolling_7d_negative_avg
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column burnout_level
+		dataType: string
+		lineageTag: 194939f8-f255-401f-b0f5-aa63787e1551
+		sourceLineageTag: burnout_level
+		summarizeBy: none
+		sourceColumn: burnout_level
+
+		annotation SummarizationSetBy = Automatic
+
+	column event_dept_key
+		dataType: string
+		lineageTag: e7d146da-6ef3-4400-ae57-c7e06bcdbd46
+		sourceLineageTag: event_dept_key
+		summarizeBy: none
+		sourceColumn: event_dept_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column department_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 366b7761-8589-468b-8b37-70207d509f5f
+		sourceLineageTag: department_id
+		summarizeBy: none
+		sourceColumn: department_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_events
+		dataType: int64
+		formatString: 0
+		lineageTag: ce82f69f-dcba-478f-90c4-717373027bb3
+		sourceLineageTag: total_events
+		summarizeBy: sum
+		sourceColumn: total_events
+
+		annotation SummarizationSetBy = Automatic
+
+	column negative_events
+		dataType: int64
+		formatString: 0
+		lineageTag: 19e86cae-c7ac-4b1d-b708-4c769b1efbfa
+		sourceLineageTag: negative_events
+		summarizeBy: sum
+		sourceColumn: negative_events
+
+		annotation SummarizationSetBy = Automatic
+
+	column avg_negative_intensity
+		dataType: double
+		lineageTag: 12245682-70db-447e-ba2f-e86af12a04e1
+		sourceLineageTag: avg_negative_intensity
+		summarizeBy: sum
+		sourceColumn: avg_negative_intensity
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column negative_ratio
+		dataType: double
+		lineageTag: 246cbba9-bed3-4f07-81a9-582eac7f7413
+		sourceLineageTag: negative_ratio
+		summarizeBy: sum
+		sourceColumn: negative_ratio
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column event_day_ts
+		dataType: int64
+		formatString: 0
+		lineageTag: e264bd57-9d6c-4108-8031-daedbb35cf9b
+		sourceLineageTag: event_day_ts
+		summarizeBy: sum
+		sourceColumn: event_day_ts
+
+		annotation SummarizationSetBy = Automatic
+
+	partition gold_burnout_daily_metrics = entity
+		mode: directLake
+		source
+			entityName: gold_burnout_daily_metrics
+			schemaName: gold
+			expressionSource: 'DirectLake - LhInsightFabric'
+

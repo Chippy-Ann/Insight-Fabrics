@@ -1,0 +1,30 @@
+table dimdepartment
+	lineageTag: 594aaf55-1ed2-488d-9606-a61a33f9b669
+	sourceLineageTag: [gold].[dimdepartment]
+
+	column department
+		dataType: string
+		lineageTag: 71fa4db8-cb28-4594-985a-4fe80ca77ccb
+		sourceLineageTag: department
+		summarizeBy: none
+		sourceColumn: department
+
+		annotation SummarizationSetBy = Automatic
+
+	column id
+		dataType: int64
+		formatString: 0
+		lineageTag: 157196ea-72d5-4550-af0b-2f4b3d769b54
+		sourceLineageTag: id
+		summarizeBy: none
+		sourceColumn: id
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dimdepartment = entity
+		mode: directLake
+		source
+			entityName: dimdepartment
+			schemaName: gold
+			expressionSource: 'DirectLake - LhInsightFabric'
+

@@ -1,0 +1,89 @@
+table dimdate
+	lineageTag: 7cefb5b1-9712-43d4-8958-d1f8640644cd
+	sourceLineageTag: [gold].[dimdate]
+
+	column Date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 55e7b628-c96e-4a8f-91df-27e6a9469c5c
+		sourceLineageTag: Date
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: 78044ebe-7a3b-43db-bb7c-988b7aae7569
+		sourceLineageTag: Year
+		summarizeBy: sum
+		sourceColumn: Year
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month
+		dataType: int64
+		formatString: 0
+		lineageTag: 35f88ddb-696e-4184-a14b-95a751590e7a
+		sourceLineageTag: Month
+		summarizeBy: sum
+		sourceColumn: Month
+
+		annotation SummarizationSetBy = Automatic
+
+	column Day
+		dataType: int64
+		formatString: 0
+		lineageTag: 2374244c-09e5-4e25-b6aa-7f597e27cb7c
+		sourceLineageTag: Day
+		summarizeBy: sum
+		sourceColumn: Day
+
+		annotation SummarizationSetBy = Automatic
+
+	column DayOfWeek
+		dataType: int64
+		formatString: 0
+		lineageTag: e5092cbc-667d-4490-89a8-72def1547030
+		sourceLineageTag: DayOfWeek
+		summarizeBy: sum
+		sourceColumn: DayOfWeek
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthName
+		dataType: string
+		lineageTag: d0161899-9448-464a-bed7-cdf149734fbe
+		sourceLineageTag: MonthName
+		summarizeBy: none
+		sourceColumn: MonthName
+
+		annotation SummarizationSetBy = Automatic
+
+	column YearMonth
+		dataType: string
+		lineageTag: 8068ffb3-46b2-4d5a-a4f6-cf73be9053b1
+		sourceLineageTag: YearMonth
+		summarizeBy: none
+		sourceColumn: YearMonth
+
+		annotation SummarizationSetBy = Automatic
+
+	column DateKey
+		dataType: int64
+		formatString: 0
+		lineageTag: dd7b0356-9f0d-45e0-9c1b-aa2a29c7d05a
+		sourceLineageTag: DateKey
+		summarizeBy: count
+		sourceColumn: DateKey
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dimdate = entity
+		mode: directLake
+		source
+			entityName: dimdate
+			schemaName: gold
+			expressionSource: 'DirectLake - LhInsightFabric'
+

@@ -1,0 +1,24 @@
+relationship c39a5c8f-9076-a745-e441-b26c9ece474e
+	fromColumn: emotion_trend_daily.event_date
+	toColumn: dimdate.Date
+
+relationship 20e2f5b0-5a86-5953-9a33-a6142f54cc34
+	fromColumn: emotion_trend_daily.department_id
+	toColumn: dimdepartment.id
+
+relationship 272e9a2d-37f6-4483-0536-e31ef7553ba6
+	fromColumn: gold_sentiment_daily.event_date
+	toColumn: dimdate.Date
+
+relationship db51a9bd-01de-3c4f-0b2f-900392b86180
+	fromColumn: gold_burnout_daily_metrics.event_date
+	toColumn: dimdate.Date
+
+relationship bd323c7f-b749-bca7-1f90-974f3ab1d020
+	fromColumn: gold_sentiment_daily.department_id
+	toColumn: dimdepartment.id
+
+relationship 15cc152d-0caf-1b28-72a4-71fbb5bd3712
+	fromColumn: gold_burnout_daily_metrics.department_id
+	toColumn: dimdepartment.id
+
