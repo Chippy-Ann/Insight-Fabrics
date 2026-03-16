@@ -3,7 +3,7 @@
 **Insight-Fabrics** is a hands-on data engineering repository demonstrating **end-to-end analytics solutions built using Microsoft Fabric**.
 The project showcases how raw data is ingested, transformed, and modeled into **analytics-ready datasets** using Fabric Lakehouse, Pipelines, and Spark notebooks.
 
-This repository is designed to reflect **real-world data engineering patterns**, not just isolated experiments, and aligns closely with **enterprise Fabric workloads and DP-600 concepts.**
+This repository is designed to reflect **real-world data engineering patterns**, not just isolated experiments, and aligns closely with **enterprise Fabric workloads and DP-700 concepts.**
 
 ---
 
